@@ -5,10 +5,21 @@
 Preguntas para el profe:
  puedo poner el calculo de la velocidad de la bala en el contructor de la misma???
  
+PROBLEMAS A SOLUCIONAR:
+- cambiar el ramdon de "if (millis() - tGuardadoObst >= random(500, 3000)) {
+    tGuardadoObst = millis();
+    // Crear obstáculo
+}" 
+y hacer que el random se crree de ante mano y no ejecutarlo en cada if.
+
+- hacer que las balas sean eliminadas si salen de la pantalla
+
+- guardar el instante de inicio de cada partida y calcular el tiempo transcurrido con millis() - inicioPartida para resetear ese tiempo
+
+- 
  
- 
- PROXIMA PROXIMA VERSION:
-- darle movimiento a los helicopteros
+
+
  
  
  
