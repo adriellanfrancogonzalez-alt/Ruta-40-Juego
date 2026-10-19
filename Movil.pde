@@ -23,8 +23,9 @@ class Movil {
     else//desacelerar si no se toca nada
     {
       if (abs(vel.y) <= 7.2)vel.y = 7;
-      if (vel.y<5) vel.y=vel.y+0.1;
-      if (vel.y>5) vel.y=vel.y-0.1;
+  //    if (vel.y<5) vel.y=vel.y+0.1;  eliminar
+//      if (vel.y>5) vel.y=vel.y-0.1;   eliminar 
+//SON REDUNDANTES Y EL IF DE ARRIBA LAS REEMPLAZA
     }
 
    
