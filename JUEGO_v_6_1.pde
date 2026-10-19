@@ -64,11 +64,11 @@ void setup() {
   //size(900, 700);
   fullScreen();
    
-   heliImg= loadImage("img/helicoptero.png");
-   arbusto1= loadImage("img/arbusto1.png");
-   auto1= loadImage("img/obstaculo1.png");
-   municion1= loadImage("img/municion.png");
-   botiquin1= loadImage("img/botiquin.png");
+   heliImg= loadImage("data/helicoptero.png");
+   arbusto1= loadImage("data/arbusto1.png");
+   auto1= loadImage("data/obstaculo1.png");
+   municion1= loadImage("data/municion.png");
+   botiquin1= loadImage("data/botiquin.png");
   estadodeljuego =0;
   kilometraje=0;
   ultimoKm=0;
