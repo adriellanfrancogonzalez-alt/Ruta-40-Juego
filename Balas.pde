@@ -12,7 +12,7 @@ class Balas {
     float dx = finalX - inicioX;
     float dy = finalY - inicioY;
     float h= dist(inicioX, inicioY, finalX, finalY);
-    vel= new PVector(dx/h*32, dy/h*32);
+    if(h!=0) vel= new PVector(dx/h*32, dy/h*32);
   }
 
   Balas(float inicioX, float inicioY, float finalX, float finalY,float velocidad) {
@@ -21,7 +21,7 @@ class Balas {
     float dx = finalX - inicioX;
     float dy = finalY - inicioY;
     float h= dist(inicioX, inicioY, finalX, finalY);
-    vel= new PVector(dx/h * velocidad, dy/h * velocidad);
+    if(h!=0) vel= new PVector(dx/h * velocidad, dy/h * velocidad);
   }
 
   void mover() {
