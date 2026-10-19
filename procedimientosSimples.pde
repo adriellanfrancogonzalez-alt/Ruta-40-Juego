@@ -24,22 +24,20 @@ void textos() {
   if (auto.vel.y == auto.maxVel || auto.vel.y == -5) fill(255, 0, 0);
   text("vel: "+ abs(int(auto.vel.y)), array[1], height -height/10);
   fill(0, 0, 0);
-  text("vida: "+ int(auto.vida), array[1],height- height/5);
-if(auto.cantBalas==0) fill(255,0,0);
-text("balas: "+ auto.cantBalas, array[1], height-height/3.5);
-fill(0, 0, 0);
-if(estadodeljuego==1 && auto.cantBalas > 0 && millis() - auto.ultimoDisparo < auto.coolDown)
-text( int((millis() - auto.ultimoDisparo ) / 100 ) + "/10",array[1], height-height/2);
+  text("vida: "+ int(auto.vida), array[1], height- height/5);
+  if (auto.cantBalas==0) fill(255, 0, 0);
+  text("balas: "+ auto.cantBalas, array[1], height-height/3.5);
+  fill(0, 0, 0);
+  if (estadodeljuego==1 && auto.cantBalas > 0 && millis() - auto.ultimoDisparo < auto.coolDown)
+    text( int((millis() - auto.ultimoDisparo ) / 100 ) + "/10", array[1], height-height/2);
 
 
-  text("Tiempo: " + int(millis()/1000), array[11],height- height/10);
-  text("km: "+ abs(int(kilometraje)), array[11],height- height/5);
-  
-  
+  text("Tiempo: " + int(millis()/1000), array[11], height- height/10);
+  text("km: "+ abs(int(kilometraje)), array[11], height- height/5);
 }
 
 void procedimientoLineaRuta() {
-rectMode(CENTER);
+  rectMode(CENTER);
 
   for (int i=0; i<cantLineaRuta; i++)
   {
@@ -72,14 +70,39 @@ void pantallaDeProgramador() {
 }
 
 
-void mostrarBalas(){
-    for (Balas p : balaJugador) {
-      p.mover();
+void balasProce() {
+
+  // BALAS DEL JUGADOR
+  for (int i = balaJugador.size() - 1; i >= 0; i--) {
+    Balas p = balaJugador.get(i);
+    p.mover();
+
+    // Si la bala salió completamente de la pantalla, eliminarla
+    if (p.pos.x + p.r/2 < 0 || //sale izq
+      p.pos.x - p.r/2 > width || // sale derecha
+      p.pos.y + p.r/2 < 0 || //sale arriba
+      p.pos.y - p.r/2 > height) { //sale abajo
+
+      balaJugador.remove(i);
+    } else {
       p.mostrar();
     }
-    for (Balas p : balaEnemigo) {
-      p.mover();
+  }
+
+  // BALAS DEL ENEMIGO
+  for (int i = balaEnemigo.size() - 1; i >= 0; i--) {
+    Balas p = balaEnemigo.get(i);
+    p.mover();
+
+    // Si la bala salió completamente de la pantalla, eliminarla
+    if (p.pos.x + p.r/2 < 0 ||
+      p.pos.x - p.r/2 > width ||
+      p.pos.y + p.r/2 < 0 ||
+      p.pos.y - p.r/2 > height) {
+
+      balaEnemigo.remove(i);
+    } else {
       p.mostrar();
     }
-    
+  }
 }

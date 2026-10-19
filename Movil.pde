@@ -12,7 +12,7 @@ class Movil {
   float maxBalas=20;
   Movil() {
     pos= new PVector(width/2.5, height-height/7);
-    vel= new PVector(7, 0);
+    vel= new PVector(height/150, 0); // puse height/100 para que la velocidad cambie si cambia el alto
   }
   void mover() {
     if ((is_a || is_LEFT) && pos.x>0) pos.x=pos.x-vel.x;//izquierda

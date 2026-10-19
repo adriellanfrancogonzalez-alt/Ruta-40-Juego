@@ -76,8 +76,8 @@ float numeroAleatorio= random(1) < 0.5 ? random(0,2) : random(9,12);
   }
 }
 void helicopteroProcedimiento() {
-  if (kilometraje-ultimoKm >= random(1, 6)) {
-    ultimoKm= kilometraje;
+  if (millis()-tGuardadoHeli >= random(5000, 10000)) {
+    tGuardadoHeli= millis();
     int direccionHelipX = int(random(2));//ver si va a la derecha o a la izquierda
     if (direccionHelipX == 0) direccionHelipX=-1; // si es cero que vaya a la izquierda
     helicoptero.add( new Enemigos (random(array[1], array[11]), height/10, 1 * direccionHelipX,heliImg) ); //posicion inicial en x
@@ -143,6 +143,7 @@ void recibirDispDelEnemigo() {
         a.ultimaColision = millis();
       }
       balaEnemigo.remove(i);
+      return;
     }
   }
 }
@@ -212,7 +213,9 @@ void suministroProcedimiento() {
     if ( hayColision(auto.pos.x, auto.pos.y, auto.ancho, auto.alto, m.pos.x, m.pos.y, m.ancho) ) {
       auto.cantBalas = auto.cantBalas + 10;
       muni.remove(i);
-    }
+      }
+       if (m.pos.y - m.alto >= height) muni.remove(i);
+    
   }
 }
 
@@ -236,6 +239,11 @@ void botiquinProcedimiento() {
       auto.vida= auto.vida + 20;
       if(auto.vida>=100) auto.vida=100;
       botiquin.remove(i);
+      return;
+    }
+    if (m.pos.y - m.alto >= height) {
+      muni.remove(i);
+      return;
     }
   }
 }
