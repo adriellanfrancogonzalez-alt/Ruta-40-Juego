@@ -62,10 +62,7 @@ void pantallaDeProgramador() {
 
     fill(0);
     for (int i=0; i<array.length; i++) text(i, array[i], height/2, 20);
-    for (int i=0; i<helicoptero.size(); i++) {
-      Enemigos aux= helicoptero.get(0);
-      text(aux.vida, width/6, height/3);
-    }
+  
   }
 }
 
