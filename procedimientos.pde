@@ -242,7 +242,7 @@ void botiquinProcedimiento() {
       return;
     }
     if (m.pos.y - m.alto >= height) {
-      muni.remove(i);
+      botiquin.remove(i);
       return;
     }
   }
