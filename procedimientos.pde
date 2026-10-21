@@ -32,7 +32,7 @@ boolean hayColision(float posX1, float posY1, float ancho1, float alto1, float p
 void obstProce() {
 
   //   calcula el tiempo que paso, si paso mas del tiempo dicho se ejecuta
-  if (millis()- tGuardadoObst >= random(500, 3000)) {
+  if (tiempo- tGuardadoObst >= random(500, 3000)) {
     tGuardadoObst=millis();
     //posicion inicial en x
     do {
@@ -55,7 +55,7 @@ void obstProce() {
 void arbolProcedimiento() {
 
   //   calcula el tiempo que paso, si paso mas del tiempo dicho se ejecuta
-  if (millis()- tGuardadoArbol >= random(200, 1000)) {
+  if (tiempo- tGuardadoArbol >= random(200, 1000)) {
     tGuardadoArbol=millis();
     //posicion inicial en x
     
@@ -76,7 +76,7 @@ float numeroAleatorio= random(1) < 0.5 ? random(0,2) : random(9,12);
   }
 }
 void helicopteroProcedimiento() {
-  if (millis()-tGuardadoHeli >= random(5000, 10000)) {
+  if (tiempo-tGuardadoHeli >= random(5000, 10000)) {
     tGuardadoHeli= millis();
     int direccionHelipX = int(random(2));//ver si va a la derecha o a la izquierda
     if (direccionHelipX == 0) direccionHelipX=-1; // si es cero que vaya a la izquierda
@@ -101,7 +101,7 @@ void helicopteroProcedimiento() {
   }
   for (Enemigos p : helicoptero) {//DISPARAR AL JUGADOR
 
-    if (millis() -p.ultimoDisparo > random(3000, 9000) ) {
+    if (tiempo -p.ultimoDisparo > random(3000, 9000) ) {
       p.ultimoDisparo = millis();
 
 
@@ -120,7 +120,7 @@ void recibirDispDelJugador() {
       //detectar si hay colision
       if ( hayColision( e.pos.x, e.pos.y, e.ancho, e.alto, balaAux.pos.x, balaAux.pos.y, balaAux.r) ) {//paso un segundo desde la ultima colision?
         e.vida=e.vida - balaAux.daño;
-        e.ultimaColision = millis();
+        e.ultimaColision = tiempo;
         balaJugador.remove(i);
         break;//si un objeto solo puede producir un impacto, después de procesar ese impacto no sigas buscando otros impactos para el mismo objeto.
       }
@@ -140,7 +140,7 @@ void recibirDispDelEnemigo() {
     if (hayColision( a.pos.x, a.pos.y, a.ancho, a.alto, b.pos.x, b.pos.y, b.r) ) {//paso un segundo desde la ultima colision?
       if ( !estadoInmune() ) {
         a.vida=a.vida - b.daño/2;
-        a.ultimaColision = millis();
+        a.ultimaColision = tiempo;
       }
       balaEnemigo.remove(i);
       return;
@@ -158,7 +158,7 @@ void colisionarConObst() {
 
       a.vida=a.vida-10;
       a.vel.y=a.vel.y/2;
-      auto.ultimaColision=millis();
+      auto.ultimaColision=tiempo;
       return;
     }
   }
@@ -173,7 +173,7 @@ void colisionarConArbol() {
 
       a.vida=a.vida-10;
       a.vel.y=a.vel.y/2;
-      auto.ultimaColision=millis();
+      auto.ultimaColision=tiempo;
       return;
     }
   }
@@ -190,13 +190,13 @@ void disparar() {
   if (estadodeljuego==1 && auto.cantBalas >0 && millis() - auto.ultimoDisparo > auto.coolDown ) {
     balaJugador.add(new Balas(auto.pos.x, auto.pos.y, mouseX, mouseY));
     auto.cantBalas--; // se le resta una bala
-    auto.ultimoDisparo=millis();
+    auto.ultimoDisparo= tiempo;
   }
 }
 
 void suministroProcedimiento() {
-  if (millis()- tGuardadoMuni >= random(10000, 12000)) {   //APARECER
-    tGuardadoMuni=millis();
+  if (tiempo- tGuardadoMuni >= random(10000, 12000)) {   //APARECER
+    tGuardadoMuni=tiempo;
     do {
       arrayPorUsar= int(random(3, 8));
     } while (ultArrayUsado == arrayPorUsar);
@@ -220,8 +220,8 @@ void suministroProcedimiento() {
 }
 
 void botiquinProcedimiento() {
-  if (millis()- tGuardadoBoti >= random(10000, 18000)) {   //APARECER
-    tGuardadoBoti=millis();
+  if (tiempo- tGuardadoBoti >= random(10000, 18000)) {   //APARECER
+    tGuardadoBoti=tiempo;
     do {
       arrayPorUsar= int(random(3, 8));
     } while (ultArrayUsado == arrayPorUsar);
@@ -252,9 +252,9 @@ void movilProce(){
   
   if (auto.vel.y>=auto.maxVel) auto.vel.y=auto.maxVel;// IF PARA NO SUPERAR MAXIMAS VELOCIDADES
     if ( auto.pos.x -auto.ancho/2<= array[1]*3 || auto.pos.x+auto.ancho/2 >= width - array[1]*3){
-      if(millis() - tAux > 100) {
-        auto.vida = auto.vida - 2;
-        tAux= millis();
+      if(tiempo - tAux > 100) {
+        auto.vida = auto.vida - 1;
+        tAux= tiempo;
       }      
       auto.maxVel=5; // BAJAR MAXVEL SI TOCA PASTO
     }

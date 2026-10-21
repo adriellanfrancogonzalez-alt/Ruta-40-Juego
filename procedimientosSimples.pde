@@ -62,7 +62,6 @@ void pantallaDeProgramador() {
 
     fill(0);
     for (int i=0; i<array.length; i++) text(i, array[i], height/2, 20);
-  
   }
 }
 
@@ -102,4 +101,31 @@ void balasProce() {
       p.mostrar();
     }
   }
+}
+
+void resetearValores(){
+  estadodeljuego =0;
+  kilometraje=0;
+  tGuardadoHeli=0;
+  tGuardadoObst=0;
+  tGuardadoMuni=0;
+  tGuardadoArbol=0;
+  tGuardadoBoti=0;
+  ultArrayUsado=0;
+  tAux=0; 
+  tComenzarPartida = millis();
+  tiempo=0;
+}
+
+void barrasEstado(){
+  
+  fill(0);
+ rect(array[3],height-height/20 ,array[6], 15); 
+  fill(255,0,0);
+rect(array[3],height-height/20 , map(auto.vida, 0, 100, 0, array[6]), 15);
+ fill(0);
+ rect(array[3],height-height/13 ,array[6], 10); 
+fill(255,255,0);
+rect(array[3],height-height/13 , map(auto.cantBalas, 0, auto.maxBalas, 0, array[6]), 10);
+
 }

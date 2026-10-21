@@ -5,6 +5,8 @@
 Preguntas para el profe:
  puedo poner el calculo de la velocidad de la bala en el contructor de la misma???
 
+
+
  */
 
 PFont miFuente;
@@ -13,6 +15,7 @@ PImage auto1;
 PImage arbusto1;
 PImage municion1;
 PImage botiquin1;
+PImage jugador;
 final int cantLineaRuta=15;
 float[] array=new float[12];
 
@@ -32,34 +35,28 @@ ArrayList <Suministros> muni;
 ArrayList <Suministros> botiquin;
 int i, cant=50;
 int vel=10;
-float kilometraje=0;
-float tGuardadoHeli=0;
-float tGuardadoMuni=0;
-float tGuardadoArbol=0;
-float tGuardadoBoti=0;
+float kilometraje=0 ; // este si es float
+int tGuardadoHeli=0;
+int tGuardadoMuni=0;
+int tGuardadoArbol=0;
+int tGuardadoBoti=0;
 int ultArrayUsado=0;
 int estadodeljuego = 0;
+int tComenzarPartida = 0;
+int tiempo=0;//este tiempo es el de la partida, no el millis
     float tAux=0;
 
 int arrayPorUsar=0;
 void setup() {
   size(500, 400);
   //fullScreen();
-   
+   resetearValores();
    heliImg= loadImage("data/helicoptero.png");
    arbusto1= loadImage("data/arbusto1.png");
    auto1= loadImage("data/obstaculo1.png");
    municion1= loadImage("data/municion.png");
    botiquin1= loadImage("data/botiquin.png");
-  estadodeljuego =0;
-  kilometraje=0;
-  tGuardadoHeli=0;
-  tGuardadoObst=0;
-  tGuardadoMuni=0;
-  tGuardadoArbol=0;
-  tGuardadoBoti=0;
-  ultArrayUsado=0;
-  tAux=0;
+   jugador = loadImage("data/jugador.png");
   miFuente = createFont("Sylfaen", 48);
   textFont(miFuente);
   for (int i=0; i<array.length; i++) array[i]=(width/12)*i ;// array de posiciones de objetos
@@ -81,8 +78,8 @@ botiquin = new ArrayList <Suministros>();
 }
 
 void draw() {
-  kilometraje = kilometraje + auto.vel.y / 3600;
-
+  kilometraje = (millis() - tComenzarPartida)/70;
+tiempo=millis()- tComenzarPartida;
 
   // MENÚ INICIAL
   if (estadodeljuego == 0) {
@@ -107,7 +104,7 @@ if (mousePressed && estadodeljuego==1) disparar();
      suministroProcedimiento();
      balasProce();
     auto.mover();
-    auto.mostrar();
+    auto.mostrar(jugador);
     
     helicopteroProcedimiento();
    botiquinProcedimiento();
@@ -120,15 +117,7 @@ if (mousePressed && estadodeljuego==1) disparar();
    textos();
    rectMode(CORNER);
   //variable q queremos cambiar, min y max de esa varible y dsp min y max del ancho del rectangulo
-  fill(0);
- rect(array[3],height-height/20 ,array[6], 15); 
-  fill(255,0,0);
-rect(array[3],height-height/20 , map(auto.vida, 0, 100, 0, array[6]), 15);
- fill(0);
- rect(array[3],height-height/13 ,array[6], 10); 
-fill(255,255,0);
-rect(array[3],height-height/13 , map(auto.cantBalas, 0, auto.maxBalas, 0, array[6]), 10);
-
+  barrasEstado();
 
 if(auto.cantBalas>=auto.maxBalas) auto.cantBalas=20;
 
@@ -144,13 +133,13 @@ if(auto.cantBalas>=auto.maxBalas) auto.cantBalas=20;
     background(50, 0, 0);
     fill(100, 0, 0);
     rect(width/2, height/2+height/6, width/3, height/7);
-    textSize(120);
+    textSize(height/10);
     fill(255);
     text("GAME OVER", width/2, height/2);
-    textSize(40);
-    text("Tu kilometraje: " + int(kilometraje), width/2, height-height/3);
-     textSize(20);
-    text("Volver a Jugar", width/2, height- height/6);
+    textSize(height/20);
+      text("Volver a Jugar", width/2, height- height/3);  
+     textSize(height/20);
+  text("Tu kilometraje: " + int(kilometraje), width/2, height-height/6);
   }
 
   
