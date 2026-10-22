@@ -78,7 +78,7 @@ botiquin = new ArrayList <Suministros>();
 }
 
 void draw() {
-  kilometraje = (millis() - tComenzarPartida)/70;
+  kilometraje = (millis() - tComenzarPartida)* 0.0001;
 tiempo=millis()- tComenzarPartida;
 
   // MENÚ INICIAL

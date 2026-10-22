@@ -187,7 +187,7 @@ boolean estadoInmune() {
 
 
 void disparar() {
-  if (estadodeljuego==1 && auto.cantBalas >0 && millis() - auto.ultimoDisparo > auto.coolDown ) {
+  if (estadodeljuego==1 && auto.cantBalas >0 && tiempo - auto.ultimoDisparo > auto.coolDown ) {
     balaJugador.add(new Balas(auto.pos.x, auto.pos.y, mouseX, mouseY));
     auto.cantBalas--; // se le resta una bala
     auto.ultimoDisparo= tiempo;
