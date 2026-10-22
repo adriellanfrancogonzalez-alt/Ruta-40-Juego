@@ -8,7 +8,7 @@ Preguntas para el profe:
 
 
  */
-
+PImage torreta;
 PFont miFuente;
 PImage heliImg;
 PImage auto1;
@@ -48,9 +48,10 @@ int tiempo=0;//este tiempo es el de la partida, no el millis
 
 int arrayPorUsar=0;
 void setup() {
-  size(500, 400);
+  size(800, 600);
   //fullScreen();
    resetearValores();
+   torreta= loadImage("data/torreta.png");
    heliImg= loadImage("data/helicoptero.png");
    arbusto1= loadImage("data/arbusto1.png");
    auto1= loadImage("data/obstaculo1.png");

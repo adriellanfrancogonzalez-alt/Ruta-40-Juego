@@ -20,6 +20,7 @@ class Obstaculos {
 
  
      imageMode(CENTER);
+     rect(pos.x, pos.y, ancho, alto);
     image(imagen, pos.x, pos.y, ancho, alto);
     imageMode(CORNER); 
 
