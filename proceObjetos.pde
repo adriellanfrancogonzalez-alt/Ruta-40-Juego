@@ -1,39 +1,9 @@
-void mousePressed() {
-  if (dist(mouseX, mouseY, width/2, height/2) <= height/4 && estadodeljuego==0) {
-    estadodeljuego = 1;
-    return;
-  }
-  if (dist(mouseX, mouseY, width/2, height/2 + height/6) <=height/3 && estadodeljuego==2){
-    setup();
-    loop();
-  }
-}
 
-
-
-
-//el elemento 1 es el auto que es chocado, y el elemento 2 es el circulo que lo choca
-boolean hayColision(float posX1, float posY1, float ancho1, float alto1, float posX2, float posY2, float radio) {
-  //CALCULAR EL PUNTO MAS CERCANO, NO SE NECESITA EL ANCHO Y ALTO DEL CIRCULO(ancho2,alto2) asi que lo cambiamos por radio
-  PVector puntoC = new PVector(0, 0);
-  if (posX2<posX1-ancho1/2) puntoC.x=posX1-ancho1/2;
-  else if (posX2>posX1+ancho1/ 2) puntoC.x=posX1+ancho1/2;
-  else puntoC.x=posX2;
-  if (posY2<posY1-alto1/2) puntoC.y=posY1-alto1/2;
-  else if (posY2>posY1+alto1/2) puntoC.y=posY1+alto1/2;
-  else puntoC.y=posY2;
-
-  //preguntarse si el punto mas cercano choca con el circulo
-  // circle(puntoC.x, puntoC.y, 10);
-  if (dist(puntoC.x, puntoC.y, posX2, posY2)<=radio/2 ) {
-    return true;
-  } else return false;
-}
 void obstProce() {
 
   //   calcula el tiempo que paso, si paso mas del tiempo dicho se ejecuta
   if (tiempo- tGuardadoObst >= random(500, 3000)) {
-    tGuardadoObst=millis();
+    tGuardadoObst=tiempo;
     //posicion inicial en x
     do {
       arrayPorUsar= int(random(3, 8));
@@ -52,7 +22,7 @@ void obstProce() {
     if (g.pos.y-g.ancho >=height) obst.remove(i); //desaparecer si se va
   }
 }
-void arbolProcedimiento() {
+void proceArbol() {
 
   //   calcula el tiempo que paso, si paso mas del tiempo dicho se ejecuta
   if (tiempo- tGuardadoArbol >= random(200, 1000)) {
@@ -75,7 +45,7 @@ float numeroAleatorio= random(1) < 0.5 ? random(0,2) : random(9,12);
     if (g.pos.y-g.ancho >=height) arbol.remove(i); 
   }
 }
-void helicopteroProcedimiento() {
+void proceHelicoptero() {
   if (tiempo-tGuardadoHeli >= random(5000, 10000)) {
     tGuardadoHeli= millis();
     int direccionHelipX = int(random(2));//ver si va a la derecha o a la izquierda
@@ -107,23 +77,6 @@ void helicopteroProcedimiento() {
 
 
       balaEnemigo.add(new Balas(p.pos.x+random(-40,40), p.pos.y, auto.pos.x, auto.pos.y, 6) );
-    }
-  }
-}
-
-void recibirDispDelJugador() {
-
-
-  for (int i= balaJugador.size() -1; i>=0; i--) {
-    Balas balaAux = balaJugador.get(i);
-    for (Enemigos e : helicoptero) {
-      //detectar si hay colision
-      if ( hayColision( e.pos.x, e.pos.y, e.ancho, e.alto, balaAux.pos.x, balaAux.pos.y, balaAux.r) ) {//paso un segundo desde la ultima colision?
-        e.vida=e.vida - balaAux.daño;
-        e.ultimaColision = tiempo;
-        balaJugador.remove(i);
-        break;//si un objeto solo puede producir un impacto, después de procesar ese impacto no sigas buscando otros impactos para el mismo objeto.
-      }
     }
   }
 }
@@ -180,21 +133,9 @@ void colisionarConArbol() {
 }
 
 
-boolean estadoInmune() {
-  return auto.ultimaColision != 0  &&
-    millis() - auto.ultimaColision <= 500;
-}
 
 
-void disparar() {
-  if (estadodeljuego==1 && auto.cantBalas >0 && tiempo - auto.ultimoDisparo > auto.coolDown ) {
-    balaJugador.add(new Balas(auto.pos.x, auto.pos.y, mouseX, mouseY));
-    auto.cantBalas--; // se le resta una bala
-    auto.ultimoDisparo= tiempo;
-  }
-}
-
-void suministroProcedimiento() {
+void proceSuministros() {
   if (tiempo- tGuardadoMuni >= random(10000, 12000)) {   //APARECER
     tGuardadoMuni=tiempo;
     do {
@@ -219,7 +160,7 @@ void suministroProcedimiento() {
   }
 }
 
-void botiquinProcedimiento() {
+void proceBotiquin() {
   if (tiempo- tGuardadoBoti >= random(10000, 18000)) {   //APARECER
     tGuardadoBoti=tiempo;
     do {
@@ -248,7 +189,7 @@ void botiquinProcedimiento() {
   }
 }
 
-void movilProce(){
+void proceAuto(){
   
   if (auto.vel.y>=auto.maxVel) auto.vel.y=auto.maxVel;// IF PARA NO SUPERAR MAXIMAS VELOCIDADES
     if ( auto.pos.x -auto.ancho/2<= array[1]*3 || auto.pos.x+auto.ancho/2 >= width - array[1]*3){
@@ -260,4 +201,12 @@ void movilProce(){
     }
     else auto.maxVel= 10; 
   
+}
+
+void disparar() {
+  if (estadodeljuego==1 && auto.cantBalas >0 && tiempo - auto.ultimoDisparo > auto.coolDown ) {
+    balaJugador.add(new Balas(auto.pos.x, auto.pos.y, mouseX, mouseY));
+    auto.cantBalas--; // se le resta una bala
+    auto.ultimoDisparo= tiempo;
+  }
 }

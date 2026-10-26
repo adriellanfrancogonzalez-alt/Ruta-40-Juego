@@ -1,3 +1,53 @@
+void mousePressed() {
+  if (dist(mouseX, mouseY, width/2, height/2) <= height/4 && estadodeljuego==0) {
+    estadodeljuego = 1;
+    return;
+  }
+  if (dist(mouseX, mouseY, width/2, height/2 + height/6) <=height/3 && estadodeljuego==2) {
+    setup();
+    loop();
+  }
+}
+boolean estadoInmune() {
+  return auto.ultimaColision != 0  &&
+    millis() - auto.ultimaColision <= 500;
+}
+//el elemento 1 es el auto que es chocado, y el elemento 2 es el circulo que lo choca
+boolean hayColision(float posX1, float posY1, float ancho1, float alto1, float posX2, float posY2, float radio) {
+  //CALCULAR EL PUNTO MAS CERCANO, NO SE NECESITA EL ANCHO Y ALTO DEL CIRCULO(ancho2,alto2) asi que lo cambiamos por radio
+  PVector puntoC = new PVector(0, 0);
+  if (posX2<posX1-ancho1/2) puntoC.x=posX1-ancho1/2;
+  else if (posX2>posX1+ancho1/ 2) puntoC.x=posX1+ancho1/2;
+  else puntoC.x=posX2;
+  if (posY2<posY1-alto1/2) puntoC.y=posY1-alto1/2;
+  else if (posY2>posY1+alto1/2) puntoC.y=posY1+alto1/2;
+  else puntoC.y=posY2;
+
+  //preguntarse si el punto mas cercano choca con el circulo
+  // circle(puntoC.x, puntoC.y, 10);
+  if (dist(puntoC.x, puntoC.y, posX2, posY2)<=radio/2 ) {
+    return true;
+  } else return false;
+}
+void recibirDispDelJugador() {
+
+
+  for (int i= balaJugador.size() -1; i>=0; i--) {
+    Balas balaAux = balaJugador.get(i);
+    for (Enemigos e : helicoptero) {
+      //detectar si hay colision
+      if ( hayColision( e.pos.x, e.pos.y, e.ancho, e.alto, balaAux.pos.x, balaAux.pos.y, balaAux.r) ) {//paso un segundo desde la ultima colision?
+        e.vida=e.vida - balaAux.daño;
+        e.ultimaColision = tiempo;
+        balaJugador.remove(i);
+        break;//si un objeto solo puede producir un impacto, después de procesar ese impacto no sigas buscando otros impactos para el mismo objeto.
+      }
+    }
+  }
+}
+
+
+
 void todaLaRuta() {
   rectMode(CENTER);
   background(100);
@@ -23,13 +73,13 @@ void textos() {
   textSize(width/25);
   if (auto.vel.y == auto.maxVel || auto.vel.y == -5) fill(255, 0, 0);
   text("vel: "+ abs(int(auto.vel.y)), array[1], height -height/10);
- 
+
   if (estadodeljuego==1 && auto.cantBalas > 0 && millis() - auto.ultimoDisparo < auto.coolDown)
     text( int((millis() - auto.ultimoDisparo ) / 100 ) + "/10", array[1], height-height/2);
 
-fill(0);
+  fill(0);
   text("Tiempo: " + int(millis()/1000), array[11], height- height/10);
-  text("km: "+ nf(kilometraje,0,1), array[11], height- height/5);
+  text("km: "+ nf(kilometraje, 0, 1), array[11], height- height/5);
 }
 
 void procedimientoLineaRuta() {
@@ -58,15 +108,14 @@ void pantallaDeProgramador() {
 
     fill(0);
     for (int i=0; i<array.length; i++) text(i, array[i], height/2, 20);
-    
-      
-   fill(0, 0, 0);
-  text("vida: "+ int(auto.vida), array[1], height- height/5);
-  if (auto.cantBalas==0) fill(255, 0, 0);
-  text("balas: "+ auto.cantBalas, array[1], height-height/3.5);
-  fill(0, 0, 0);
-  }
 
+
+    fill(0, 0, 0);
+    text("vida: "+ int(auto.vida), array[1], height- height/5);
+    if (auto.cantBalas==0) fill(255, 0, 0);
+    text("balas: "+ auto.cantBalas, array[1], height-height/3.5);
+    fill(0, 0, 0);
+  }
 }
 
 
@@ -107,7 +156,7 @@ void balasProce() {
   }
 }
 
-void resetearValores(){
+void resetearValores() {
   estadodeljuego =0;
   kilometraje=0;
   tGuardadoHeli=0;
@@ -116,20 +165,19 @@ void resetearValores(){
   tGuardadoArbol=0;
   tGuardadoBoti=0;
   ultArrayUsado=0;
-  tAux=0; 
+  tAux=0;
   tComenzarPartida = millis();
   tiempo=0;
 }
 
-void barrasEstado(){
-  
-  fill(0);
- rect(array[3],height-height/20 ,array[6], 15); 
-  fill(255,0,0);
-rect(array[3],height-height/20 , map(auto.vida, 0, 100, 0, array[6]), 15);
- fill(0);
- rect(array[3],height-height/13 ,array[6], 10); 
-fill(255,255,0);
-rect(array[3],height-height/13 , map(auto.cantBalas, 0, auto.maxBalas, 0, array[6]), 10);
+void barrasEstado() {
 
+  fill(0);
+  rect(array[3], height-height/20, array[6], 15);
+  fill(255, 0, 0);
+  rect(array[3], height-height/20, map(auto.vida, 0, 100, 0, array[6]), 15);
+  fill(0);
+  rect(array[3], height-height/13, array[6], 10);
+  fill(255, 255, 0);
+  rect(array[3], height-height/13, map(auto.cantBalas, 0, auto.maxBalas, 0, array[6]), 10);
 }

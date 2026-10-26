@@ -16,6 +16,7 @@ PImage arbusto1;
 PImage municion1;
 PImage botiquin1;
 PImage jugador;
+PImage helice;
 final int cantLineaRuta=15;
 float[] array=new float[12];
 
@@ -53,6 +54,7 @@ void setup() {
    resetearValores();
    torreta= loadImage("data/torreta.png");
    heliImg= loadImage("data/helicoptero.png");
+   helice= loadImage("data/helice.png");
    arbusto1= loadImage("data/arbusto1.png");
    auto1= loadImage("data/obstaculo1.png");
    municion1= loadImage("data/municion.png");
@@ -98,21 +100,22 @@ tiempo=millis()- tComenzarPartida;
   // JUEGO
   if (estadodeljuego == 1) {
 if (mousePressed && estadodeljuego==1) disparar();
+if(is_p) noLoop();
     todaLaRuta();
     
     obstProce();
-    arbolProcedimiento();
-     suministroProcedimiento();
+    proceArbol();
+     proceSuministros();
      balasProce();
     auto.mover();
     auto.mostrar(jugador);
     
-    helicopteroProcedimiento();
-   botiquinProcedimiento();
+    proceHelicoptero();
+   proceBotiquin();
     recibirDispDelEnemigo();
     recibirDispDelJugador();
     
-    movilProce();
+    proceAuto();
     colisionarConObst();
     colisionarConArbol();
    textos();
