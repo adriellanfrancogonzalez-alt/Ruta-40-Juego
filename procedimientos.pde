@@ -10,7 +10,7 @@ void mousePressed() {
 }
 boolean estadoInmune() {
   return auto.ultimaColision != 0  &&
-    millis() - auto.ultimaColision <= 500;
+    tiempo - auto.ultimaColision <= 1000;
 }
 //el elemento 1 es el auto que es chocado, y el elemento 2 es el circulo que lo choca
 boolean hayColision(float posX1, float posY1, float ancho1, float alto1, float posX2, float posY2, float radio) {
@@ -101,6 +101,7 @@ void procedimientoLineaRuta() {
 
 void pantallaDeProgramador() {
   textSize(width/50);
+ 
   if (is_f) {
     for (int i=0; i<array.length; i++) point(array[i], height/2);
     for (int i=0; i<array.length; i++) point(i/2, height/2);
@@ -111,6 +112,10 @@ void pantallaDeProgramador() {
 
 
     fill(0, 0, 0);
+    textSize(width/20);
+    
+      text("FPS: "+ int(frameRate), array[1], height/10);
+      textSize(width/40);
     text("vida: "+ int(auto.vida), array[1], height- height/5);
     if (auto.cantBalas==0) fill(255, 0, 0);
     text("balas: "+ auto.cantBalas, array[1], height-height/3.5);

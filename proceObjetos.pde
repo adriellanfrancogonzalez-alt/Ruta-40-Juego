@@ -1,14 +1,14 @@
 
-void obstProce() {
+void proceObst() {
 
   //   calcula el tiempo que paso, si paso mas del tiempo dicho se ejecuta
-  if (tiempo- tGuardadoObst >= random(500, 3000)) {
+  if (tiempo- tGuardadoObst >= random(200, 2000)) {
     tGuardadoObst=tiempo;
     //posicion inicial en x
     do {
       arrayPorUsar= int(random(3, 8));
     } while (ultArrayUsado == arrayPorUsar);
-    
+
     ultArrayUsado = arrayPorUsar;
     obst.add( new Obstaculos(  array[arrayPorUsar] +array[1]/2, auto1) );
   }
@@ -25,15 +25,15 @@ void obstProce() {
 void proceArbol() {
 
   //   calcula el tiempo que paso, si paso mas del tiempo dicho se ejecuta
-  if (tiempo- tGuardadoArbol >= random(200, 1000)) {
-    tGuardadoArbol=millis();
+  if (tiempo- tGuardadoArbol >= random(1000, 5000)) {
+    tGuardadoArbol= tiempo;
     //posicion inicial en x
-    
+
     //primero saca una prob de 50 50 si(?) es menor que 0.5 saca el primer random, y si no(:) , saca el segundo.d
     // ?  si pasa esto entonces pasa esto
     // : si no paso lo anterior entonces pasa esto
-float numeroAleatorio= random(1) < 0.5 ? random(0,2) : random(9,12);
-    arbol.add( new Obstaculos(  array[int(numeroAleatorio)] +array[1]/2 ,arbusto1 ) );
+    float numeroAleatorio= random(1) < 0.5 ? random(0, 2) : random(9, 12);
+    arbol.add( new Obstaculos(  array[int(numeroAleatorio)] +array[1]/2, arbusto1 ) );
   }
   for (Obstaculos p : arbol) {
     p.mover(auto.vel.y);
@@ -42,41 +42,39 @@ float numeroAleatorio= random(1) < 0.5 ? random(0,2) : random(9,12);
 
   for ( i= arbol.size()-1; i >=0; i--) {
     Obstaculos g = arbol.get(i);
-    if (g.pos.y-g.ancho >=height) arbol.remove(i); 
+    if (g.pos.y-g.ancho >=height) arbol.remove(i);
   }
 }
 void proceHelicoptero() {
-  if (tiempo-tGuardadoHeli >= random(5000, 10000)) {
-    tGuardadoHeli= millis();
+  if (tiempo-tGuardadoHeli >= 15000) {//aparecer helicoptero
+    tGuardadoHeli= tiempo;
     int direccionHelipX = int(random(2));//ver si va a la derecha o a la izquierda
     if (direccionHelipX == 0) direccionHelipX=-1; // si es cero que vaya a la izquierda
-    helicoptero.add( new Enemigos (random(array[1], array[11]), height/10, 1 * direccionHelipX,heliImg) ); //posicion inicial en x
-    if(random(1) < 0.5)helicoptero.add( new Enemigos (random(array[1], array[11]), height/10, 1 * direccionHelipX,heliImg) );
-    if(random(1) < 0.25)helicoptero.add( new Enemigos (random(array[1], array[11]), height/10, 1 * direccionHelipX,heliImg) );
-    if(random(1) < 0.1)helicoptero.add( new Enemigos (random(array[1], array[11]), height/10, 1 * direccionHelipX,heliImg) );
-     if(random(1) < 0.01)helicoptero.add( new Enemigos (random(array[1], array[11]), height/10, 1 * direccionHelipX,heliImg) );//posicion inicial en x
+    helicoptero.add( new Enemigos (random(array[1], array[11]), height/10, 1 * direccionHelipX, heliImg) ); //posicion inicial en x
+    if (random(1) < 0.5)helicoptero.add( new Enemigos (random(array[1], array[11]), height/10, 1 * direccionHelipX, heliImg) );
+    if (random(1) < 0.25)helicoptero.add( new Enemigos (random(array[1], array[11]), height/10, 1 * direccionHelipX, heliImg) );
   }
-  for (int i= helicoptero.size() -1; i >= 0; i--) {// si el enemigo no tiene vida desaparece
+  for (int i= helicoptero.size() -1; i >= 0; i--) {//eliminar helicoptero
     Enemigos enemigoAux = helicoptero.get(i);
     if (enemigoAux.vida <= 0 ) {
       helicoptero.remove(i);
     }
   }
 
-  for (Enemigos p : helicoptero) {//REBOTAR
+  for (Enemigos p : helicoptero) {//ejecutar helicoptero
     p.mostrar();
     p.mover();
     if (p.pos.x >= array[1]) p.vel.x = p.vel.x * -1 ;
     if (p.pos.x <= array[11]) p.vel.x = p.vel.x * -1 ;
   }
-  for (Enemigos p : helicoptero) {//DISPARAR AL JUGADOR
+  for (Enemigos p : helicoptero) {//helicoptero disparar
 
     if (tiempo -p.ultimoDisparo > random(3000, 9000) ) {
-      p.ultimoDisparo = millis();
+      p.ultimoDisparo = tiempo;
 
 
 
-      balaEnemigo.add(new Balas(p.pos.x+random(-40,40), p.pos.y, auto.pos.x, auto.pos.y, 6) );
+      balaEnemigo.add(new Balas(p.pos.x+random(-40, 40), p.pos.y, auto.pos.x, auto.pos.y, 6) );
     }
   }
 }
@@ -142,7 +140,7 @@ void proceSuministros() {
       arrayPorUsar= int(random(3, 8));
     } while (ultArrayUsado == arrayPorUsar);
     ultArrayUsado = arrayPorUsar;
-    muni.add( new Suministros(  array[arrayPorUsar] +array[1]/2,municion1 ) );
+    muni.add( new Suministros(  array[arrayPorUsar] +array[1]/2, municion1 ) );
   }
 
   for ( Suministros p : muni) { //MOSTRAR
@@ -154,9 +152,8 @@ void proceSuministros() {
     if ( hayColision(auto.pos.x, auto.pos.y, auto.ancho, auto.alto, m.pos.x, m.pos.y, m.ancho) ) {
       auto.cantBalas = auto.cantBalas + 10;
       muni.remove(i);
-      }
-       if (m.pos.y - m.alto >= height) muni.remove(i);
-    
+    }
+    if (m.pos.y - m.alto >= height) muni.remove(i);
   }
 }
 
@@ -178,29 +175,28 @@ void proceBotiquin() {
     Suministros m =botiquin.get(i);
     if ( hayColision(auto.pos.x, auto.pos.y, auto.ancho, auto.alto, m.pos.x, m.pos.y, m.ancho) ) {
       auto.vida= auto.vida + 20;
-      if(auto.vida>=100) auto.vida=100;
+      if (auto.vida>=100) auto.vida=100;
       botiquin.remove(i);
       return;
     }
     if (m.pos.y - m.alto >= height) {
       botiquin.remove(i);
-      return;
+      return; 
+      
     }
   }
 }
 
-void proceAuto(){
-  
+void proceAuto() {
+
   if (auto.vel.y>=auto.maxVel) auto.vel.y=auto.maxVel;// IF PARA NO SUPERAR MAXIMAS VELOCIDADES
-    if ( auto.pos.x -auto.ancho/2<= array[1]*3 || auto.pos.x+auto.ancho/2 >= width - array[1]*3){
-      if(tiempo - tAux > 100) {
-        auto.vida = auto.vida - 1;
-        tAux= tiempo;
-      }      
-      auto.maxVel=5; // BAJAR MAXVEL SI TOCA PASTO
+  if ( auto.pos.x -auto.ancho/2<= array[1]*3 || auto.pos.x+auto.ancho/2 >= width - array[1]*3) {
+    if (tiempo - tAux > 100) {
+      auto.vida = auto.vida - 1;
+      tAux= tiempo;
     }
-    else auto.maxVel= 10; 
-  
+    auto.maxVel=5; // BAJAR MAXVEL SI TOCA PASTO
+  } else auto.maxVel= 10;
 }
 
 void disparar() {

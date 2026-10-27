@@ -6,7 +6,7 @@ class Obstaculos {
   float ancho=auto.ancho;
   float tiempoGuardado=0;
   PImage imagen;
-  Obstaculos(float posInicioX,PImage imagen1) {
+  Obstaculos(float posInicioX, PImage imagen1) {
     pos= new PVector(posInicioX, -ancho);
     imagen=imagen1;
   }
@@ -18,12 +18,10 @@ class Obstaculos {
   void mostrar() {
     fill(0, 0, 0);
 
- 
-     imageMode(CENTER);
-     rect(pos.x, pos.y, ancho, alto);
+
+    imageMode(CENTER);
+    rect(pos.x, pos.y, ancho, alto);
     image(imagen, pos.x, pos.y, ancho, alto);
-    imageMode(CORNER); 
-
-
+    imageMode(CORNER);
   }
 }

@@ -3,7 +3,7 @@ class Movil {
   PVector vel;
   float ancho=array[1]*0.75, alto=height/7;
   float acele=0.1;
-  float maxVel;
+  float maxVel=10;
   float vida=100;
   float ultimaColision=0;//el milisengundo guardado en el que ocurrio la ultima colision
   int cantBalas= 20;
@@ -14,21 +14,21 @@ class Movil {
   
   Movil() {
     pos= new PVector(width/2.5, height-height/7);
-    vel= new PVector(height/100, 0); // puse height/100 para que la velocidad cambie si cambia el alto
+    vel= new PVector(height/175, 10); // puse height/175 para que la velocidad cambie si cambia el alto
   }
   void mover() {
     if ((is_a || is_LEFT) && pos.x>0) pos.x=pos.x-vel.x;//izquierda
 
     if ((is_d || is_RIGHT) && pos.x<width-ancho)pos.x=pos.x+vel.x;  //derecha
-
-    if (is_w || is_UP )  vel.y=vel.y+acele;//ACELERAR
+if(!estadoInmune() ) vel.y=vel.y+acele;
+ /*   if (is_w || is_UP )  vel.y=vel.y+acele;//ACELERAR
     else//desacelerar si no se toca nada
     {
       if (abs(vel.y) <= 7.2)vel.y = 7;
   //    if (vel.y<5) vel.y=vel.y+0.1;  eliminar
 //      if (vel.y>5) vel.y=vel.y-0.1;   eliminar 
 //SON REDUNDANTES Y EL IF DE ARRIBA LAS REEMPLAZA
-    }
+    }*/
 
    
   }
