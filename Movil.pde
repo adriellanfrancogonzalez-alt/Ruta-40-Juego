@@ -3,34 +3,32 @@ class Movil {
   PVector vel;
   float ancho=array[1]*0.75, alto=height/7;
   float acele=0.1;
-  float maxVel=10;
-  float vida=100;
+  float maxVel=8;
+  float vida=1000;
   float ultimaColision=0;//el milisengundo guardado en el que ocurrio la ultima colision
   int cantBalas= 20;
   float ultimoDisparo;
   float coolDown=200;// tiempo que tarda en disparar
   float maxBalas=20;
-  
-  
+
+
   Movil() {
     pos= new PVector(width/2.5, height-height/7);
-    vel= new PVector(height/175, 10); // puse height/175 para que la velocidad cambie si cambia el alto
+    vel= new PVector(height/175, maxVel); // puse height/175 para que la velocidad cambie si cambia el alto
   }
   void mover() {
-    if ((is_a || is_LEFT) && pos.x>0) pos.x=pos.x-vel.x;//izquierda
+    if ((is_a || is_LEFT) && pos.x>0) pos.x = pos.x - vel.x;//izquierdaw
 
-    if ((is_d || is_RIGHT) && pos.x<width-ancho)pos.x=pos.x+vel.x;  //derecha
-if(!estadoInmune() ) vel.y=vel.y+acele;
- /*   if (is_w || is_UP )  vel.y=vel.y+acele;//ACELERAR
-    else//desacelerar si no se toca nada
-    {
-      if (abs(vel.y) <= 7.2)vel.y = 7;
-  //    if (vel.y<5) vel.y=vel.y+0.1;  eliminar
-//      if (vel.y>5) vel.y=vel.y-0.1;   eliminar 
-//SON REDUNDANTES Y EL IF DE ARRIBA LAS REEMPLAZA
-    }*/
-
-   
+    if ((is_d || is_RIGHT) && pos.x < width-ancho) pos.x = pos.x + vel.x;  //derecha
+    if (!estadoInmune() ) vel.y=vel.y+acele;
+    /*   if (is_w || is_UP )  vel.y=vel.y+acele;//ACELERAR
+     else//desacelerar si no se toca nada
+     {
+     if (abs(vel.y) <= 7.2)vel.y = 7;
+     //    if (vel.y<5) vel.y=vel.y+0.1;  eliminar
+     //      if (vel.y>5) vel.y=vel.y-0.1;   eliminar
+     //SON REDUNDANTES Y EL IF DE ARRIBA LAS REEMPLAZA
+     }*/
   }
 
   void mostrar(PImage imagen) {
@@ -39,8 +37,8 @@ if(!estadoInmune() ) vel.y=vel.y+acele;
 
     if ( estadoInmune() )
       fill(200, 130, 100, 100);
-imageMode(CENTER);
-    image(imagen,pos.x, pos.y, ancho, alto);
+    imageMode(CENTER);
+    image(imagen, pos.x, pos.y, ancho, alto);
     fill(0);
 
 
@@ -58,15 +56,15 @@ imageMode(CENTER);
     //strokeWeight(2);
     rectMode(CORNER);
     //circle(0, 0, ancho/1.5);
-    //rect(ancho/14, -alto/10, alto/1.5, ancho/3); 
+    //rect(ancho/14, -alto/10, alto/1.5, ancho/3);
     imageMode(CENTER);
     image(torreta, 0, 0, alto, ancho);
     //ellipse(0, 0, 24, 24); // La base de la torreta
     rectMode(CENTER);
     popMatrix();
-    
-    
-    
-    if(auto.cantBalas>= auto.maxBalas) auto.maxBalas=20;
+
+
+
+    if (auto.cantBalas>= auto.maxBalas) auto.maxBalas=20;
   }
 }

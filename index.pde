@@ -25,6 +25,7 @@ LineasRuta[] lineaRuta2= new LineasRuta[cantLineaRuta];
 LineasRuta[] lineaRuta3= new LineasRuta[cantLineaRuta];
 LineasRuta[] lineaRuta4= new LineasRuta[cantLineaRuta];
 Movil auto;
+ArrayList <Aviones> avion;
 
 ArrayList <Obstaculos> obst;
 ArrayList <Obstaculos> arbol;
@@ -36,6 +37,7 @@ ArrayList <Suministros> botiquin;
 int i, cant=50;
 int vel=10;
 float kilometraje=0 ; // este si es float
+int tGuardadoAvion=-5000;
 int tGuardadoHeli=0;
 int tGuardadoMuni=0;
 int tGuardadoArbol=0;
@@ -53,7 +55,7 @@ void setup() {
   resetearValores();
   torreta= loadImage("data/torreta.png");
   heliImg= loadImage("data/helicoptero.png");
-  helice= loadImage("data/helice.png");
+  helice= loadImage("data/helice2.png");
   arbusto1= loadImage("data/arbusto1.png");
   auto1= loadImage("data/obstaculo1.png");
   municion1= loadImage("data/municion.png");
@@ -65,7 +67,9 @@ void setup() {
 
   rectMode(CENTER);
   textAlign(CENTER);
+
   auto=new Movil();
+  avion = new ArrayList <Aviones>();
   obst = new ArrayList <Obstaculos>();
   arbol = new ArrayList <Obstaculos>();
   balaJugador = new ArrayList <Balas>();
@@ -113,6 +117,7 @@ void draw() {
     recibirDispDelEnemigo();
     recibirDispDelJugador();
 
+    proceAvion();
     proceAuto();
     colisionarConObst();
     colisionarConArbol();

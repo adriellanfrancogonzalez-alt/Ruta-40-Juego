@@ -15,7 +15,30 @@ void proceHelicoptero() {
   eliminarHeli();
   dispararHeli();
 }
+void proceAvion() {
 
+  if (tiempo- tGuardadoAvion >= 5000) {
+    tGuardadoAvion=tiempo;
+    avion.add( new Aviones(0, random(0,255), width/2, height/2) );
+  }
+
+  for (Aviones p : avion) {
+  }
+
+  for (i=avion.size() -1; i>= 0; i--) {
+    Aviones p = avion.get(i);
+    p.mostrar();
+    p.mover();
+    println(p.pos.x, " " + (width/2 -50), p.faseInicio);
+    if (p.pos.x >= width/2 -4) {
+      p.faseInicio=false;
+    } else {
+      p.faseInicio=true;
+    }
+    
+    if(p.pos.x >= width + p.ancho || p.pos.y >= height + p.alto) avion.remove(i);
+  }
+}
 
 
 void recibirDispDelEnemigo() {
@@ -76,15 +99,18 @@ void proceBotiquin() {
 }
 
 void proceAuto() {
-
+  float aux = auto.maxVel;
   if (auto.vel.y>=auto.maxVel) auto.vel.y=auto.maxVel;// IF PARA NO SUPERAR MAXIMAS VELOCIDADES
+
   if ( auto.pos.x -auto.ancho/2<= array[1]*3 || auto.pos.x+auto.ancho/2 >= width - array[1]*3) {
+
     if (tiempo - tAux > 100) {
       auto.vida = auto.vida - 1;
       tAux= tiempo;
     }
+
     auto.maxVel=5; // BAJAR MAXVEL SI TOCA PASTO
-  } else auto.maxVel= 10;
+  } else auto.maxVel = aux ;
 }
 
 void disparar() {
@@ -147,20 +173,22 @@ void eliminarArbol() {
   }
 }
 void aparecerHeli() {
-  if (tiempo-tGuardadoHeli >= 15000) {//aparecer helicoptero
+  if (tiempo-tGuardadoHeli >= 10000) {//aparecer helicoptero
     tGuardadoHeli= tiempo;
     int direccionHelipX = int(random(2));//ver si va a la derecha o a la izquierda
     if (direccionHelipX == 0) direccionHelipX=-1; // si es cero que vaya a la izquierda
-    helicoptero.add( new Enemigos (random(array[1], array[11]), height/10, 1 * direccionHelipX, heliImg) ); //posicion inicial en x
-    if (random(1) < 0.5)helicoptero.add( new Enemigos (random(array[1], array[11]), height/10, 1 * direccionHelipX, heliImg) );
-    if (random(1) < 0.25)helicoptero.add( new Enemigos (random(array[1], array[11]), height/10, 1 * direccionHelipX, heliImg) );
+    do {
+      helicoptero.add( new Enemigos (random(array[1], array[11]), height/9, 1 * direccionHelipX, heliImg, helice) ); //posicion inicial en x
+    } while (random(1) < 0.2);
   }
 }
 void recorrerHeli() {
-  for (Enemigos p : helicoptero) {//ejecutar helicoptero
+
+  for (int i= helicoptero.size() -1; i>= 0; i--) {//ejecutar helicoptero
+    Enemigos p = helicoptero.get(i);
     p.mostrar();
     p.mover();
-    if (p.pos.x >= array[1]) p.vel.x = p.vel.x * -1 ;
+    if (p.pos.x >= array[1] ) p.vel.x = p.vel.x * -1 ;
     if (p.pos.x <= array[11]) p.vel.x = p.vel.x * -1 ;
   }
 }
