@@ -6,13 +6,14 @@ class Balas {
   float daño=35;
 
 
-  Balas(float inicioX, float inicioY, float finalX, float finalY) {
+  Balas(float inicioX, float inicioY, float finalX, float finalY,float tirador) {
     pos= new PVector(inicioX, inicioY);
     //normalizamos la hipotenusa y dividimos los catetos por ella para que siempre tengan la misma velocidad
     float dx = finalX - inicioX;
     float dy = finalY - inicioY;
     float h= dist(inicioX, inicioY, finalX, finalY);
     if(h!=0) vel= new PVector(dx/h*32, dy/h*32);
+    
   }
 
   Balas(float inicioX, float inicioY, float finalX, float finalY,float velocidad) {

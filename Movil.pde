@@ -10,7 +10,7 @@ class Movil {
   float ultimoDisparo;
   float coolDown=200;// tiempo que tarda en disparar
   float maxBalas=20;
-
+float tAux=0; //este tiempo se usa para hacer que baje despues de un segundo de estar adelante el auto en la funcion mover
 
   Movil() {
     pos= new PVector(width/2.5, height-height/7);
@@ -21,14 +21,13 @@ class Movil {
 
     if ((is_d || is_RIGHT) && pos.x < width-ancho) pos.x = pos.x + vel.x;  //derecha
     if (!estadoInmune() ) vel.y=vel.y+acele;
-    /*   if (is_w || is_UP )  vel.y=vel.y+acele;//ACELERAR
-     else//desacelerar si no se toca nada
-     {
-     if (abs(vel.y) <= 7.2)vel.y = 7;
-     //    if (vel.y<5) vel.y=vel.y+0.1;  eliminar
-     //      if (vel.y>5) vel.y=vel.y-0.1;   eliminar
-     //SON REDUNDANTES Y EL IF DE ARRIBA LAS REEMPLAZA
-     }*/
+      if (is_w || is_UP )  pos.y=pos.y-2;
+      if (is_s || is_DOWN ) pos.y=pos.y+2; 
+      if( pos.y <= height/2){
+         if (is_w || is_UP )  vel.y=vel.y + 0.01;
+        pos.y=height/2;
+      }
+   
   }
 
   void mostrar(PImage imagen) {

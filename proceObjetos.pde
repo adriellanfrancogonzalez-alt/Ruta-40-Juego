@@ -15,48 +15,49 @@ void proceHelicoptero() {
   eliminarHeli();
   dispararHeli();
 }
-void proceAvion() {
+void proceSuministros() {
+  aparecerSumi();
+  recorrerSumi();
+  eliminarSumi();
+}
 
-  if (tiempo- tGuardadoAvion >= 5000) {
-    tGuardadoAvion=tiempo;
-    avion.add( new Aviones(0, random(0,255), width/2, height/2) );
-  }
+void proceBotiquin() {
+  aparecerBoti();
+  recorrerBoti();
+  eliminarBoti();
+}
 
-  for (Aviones p : avion) {
-  }
-
-  for (i=avion.size() -1; i>= 0; i--) {
-    Aviones p = avion.get(i);
+void proceCamion() {
+  for (Camiones p : camion) {
     p.mostrar();
     p.mover();
-    println(p.pos.x, " " + (width/2 -50), p.faseInicio);
-    if (p.pos.x >= width/2 -4) {
-      p.faseInicio=false;
-    } else {
-      p.faseInicio=true;
-    }
-    
-    if(p.pos.x >= width + p.ancho || p.pos.y >= height + p.alto) avion.remove(i);
+
   }
-}
 
-
-void recibirDispDelEnemigo() {
-  for (int i= balaEnemigo.size() -1; i>=0; i--) {
-    Balas b = balaEnemigo.get(i);
-    Movil a = auto;
-    if (hayColision( a.pos.x, a.pos.y, a.ancho, a.alto, b.pos.x, b.pos.y, b.r) ) {//paso un segundo desde la ultima colision?
-      if ( !estadoInmune() ) {
-        a.vida=a.vida - b.daño/2;
-        a.ultimaColision = tiempo;
-      }
-      balaEnemigo.remove(i);
-      return;
+dispararCamion();
+  if (tiempo - tGuardadoCamion > 1000  && camion.size() == 0) {
+      tGuardadoCamion = tiempo;
+      camion.add(new Camiones( array[9] - array[1]/2 , height - height/15) );
+    }
+   
+   for (int i= camion.size() -1; i >= 0; i--) {//eliminar helicoptero
+    Camiones camionAux = camion.get(i);
+    if (camionAux.vida <= 0 ) {
+      camion.remove(i);
+      tGuardadoCamion=tiempo;
     }
   }
 }
 
 
+void dispararCamion(){
+     for (Camiones p : camion) {
+    if (tiempo -p.ultimoDisparo > 1000 && p.pos.y <= height* 2/3) {
+      p.ultimoDisparo = tiempo;
+      balaEnemigo.add(new Balas(p.pos.x+random(-40, 40), p.pos.y, auto.pos.x, auto.pos.y, 6) );
+    }
+  }
+}
 void colisionarConObst() {
   for (Obstaculos g : obst) {
     Movil a = auto;
@@ -86,30 +87,20 @@ void colisionarConArbol() {
 
 
 
-void proceSuministros() {
-  aparecerSumi();
-  recorrerSumi();
-  eliminarSumi();
-}
 
-void proceBotiquin() {
-  aparecerBoti();
-  recorrerBoti();
-  eliminarBoti();
-}
 
 void proceAuto() {
   float aux = auto.maxVel;
   if (auto.vel.y>=auto.maxVel) auto.vel.y=auto.maxVel;// IF PARA NO SUPERAR MAXIMAS VELOCIDADES
 
-  if ( auto.pos.x -auto.ancho/2<= array[1]*3 || auto.pos.x+auto.ancho/2 >= width - array[1]*3) {
+  if ( auto.pos.x -auto.ancho/2<= array[1]*3 || auto.pos.x+auto.ancho/2 >= width - array[1]*3) {//daño si esta en el pasto
 
     if (tiempo - tAux > 100) {
       auto.vida = auto.vida - 1;
       tAux= tiempo;
     }
 
-    auto.maxVel=5; // BAJAR MAXVEL SI TOCA PASTO
+    
   } else auto.maxVel = aux ;
 }
 
@@ -122,7 +113,7 @@ void disparar() {
 }
 ////////////////////////////////////////////////////////////////////////////
 void aparecerObst() {
-  if (tiempo- tGuardadoObst >= random(200, 2000)) {
+  if (tiempo- tGuardadoObst >= random(1000, 2000)) {
     tGuardadoObst=tiempo;
     //posicion inicial en x
     do {

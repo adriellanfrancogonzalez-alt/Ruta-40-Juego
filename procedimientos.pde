@@ -33,6 +33,7 @@ void recibirDispDelJugador() {
 
 
   for (int i= balaJugador.size() -1; i>=0; i--) {
+    
     Balas balaAux = balaJugador.get(i);
     for (Enemigos e : helicoptero) {
       //detectar si hay colision
@@ -43,9 +44,36 @@ void recibirDispDelJugador() {
         break;//si un objeto solo puede producir un impacto, después de procesar ese impacto no sigas buscando otros impactos para el mismo objeto.
       }
     }
-  }
+    
+   for(Camiones p: camion){
+      if ( hayColision( p.pos.x, p.pos.y, p.ancho, p.alto, balaAux.pos.x, balaAux.pos.y, balaAux.r) ) {//paso un segundo desde la ultima colision?
+        p.vida = p.vida - balaAux.daño;
+        p.ultimaColision = tiempo;
+      
+        balaJugador.remove(i);
+        break;//si un objeto solo puede producir un impacto, después de procesar ese impacto no sigas buscando otros impactos para el mismo objeto.
+      }
+   }
+      
+    }
+  
+  
 }
 
+void recibirDispDelEnemigo() {
+  for (int i= balaEnemigo.size() -1; i>=0; i--) {
+    Balas b = balaEnemigo.get(i);
+    Movil a = auto;
+    if (hayColision( a.pos.x, a.pos.y, a.ancho, a.alto, b.pos.x, b.pos.y, b.r) ) {//paso un segundo desde la ultima colision?
+      if ( !estadoInmune() ) {
+        a.vida=a.vida - b.daño/2;
+        a.ultimaColision = tiempo;
+      }
+      balaEnemigo.remove(i);
+      return;
+    }
+  }
+}
 
 
 void todaLaRuta() {
@@ -164,6 +192,7 @@ void balasProce() {
 void resetearValores() {
   estadodeljuego =0;
   kilometraje=0;
+  tGuardadoCamion=0;
   tGuardadoHeli=0;
   tGuardadoObst=0;
   tGuardadoMuni=0;
