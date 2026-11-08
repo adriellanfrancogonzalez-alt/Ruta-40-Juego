@@ -1,11 +1,11 @@
-// VERSION 8.2
+// VERSION 8.6
 // SE AGREGARON GRAFICOS
 
 /*
 Preguntas para el profe:
  puedo poner el calculo de la velocidad de la bala en el contructor de la misma???
  
- 
+ agregar funcion de recibir disparo , hacer que reciba la bala  el camion
  
  */
 PImage torreta;
@@ -19,14 +19,13 @@ PImage jugador;
 PImage helice;
 final int cantLineaRuta=15;
 float[] array=new float[12];
-float tGuardadoObst=0;
+
 LineasRuta[] lineaRuta1= new LineasRuta[cantLineaRuta];
 LineasRuta[] lineaRuta2= new LineasRuta[cantLineaRuta];
 LineasRuta[] lineaRuta3= new LineasRuta[cantLineaRuta];
 LineasRuta[] lineaRuta4= new LineasRuta[cantLineaRuta];
 Movil auto;
-ArrayList <Aviones> avion;
-
+ArrayList <Camiones> camion;
 ArrayList <Obstaculos> obst;
 ArrayList <Obstaculos> arbol;
 ArrayList <Balas> balaJugador;
@@ -37,11 +36,12 @@ ArrayList <Suministros> botiquin;
 int i, cant=50;
 int vel=10;
 float kilometraje=0 ; // este si es float
-int tGuardadoAvion=-5000;
-int tGuardadoHeli=0;
-int tGuardadoMuni=0;
-int tGuardadoArbol=0;
-int tGuardadoBoti=0;
+float kGuardadoObst=0;
+float kGuardadoCamion=0;
+float kGuardadoHeli=0;
+float kGuardadoMuni=0;
+float kGuardadoArbol=0;
+float kGuardadoBoti=0;
 int ultArrayUsado=0;
 int estadodeljuego = 0;
 int tComenzarPartida = 0;
@@ -50,12 +50,13 @@ float tAux=0;
 
 int arrayPorUsar=0;
 void setup() {
-  size(800, 600);
-  //fullScreen();
+  // size(800, 600);
+  fullScreen();
+   background(0);
   resetearValores();
   torreta= loadImage("data/torreta.png");
   heliImg= loadImage("data/helicoptero.png");
-  helice= loadImage("data/helice2.png");
+  helice= loadImage("data/helice.png");
   arbusto1= loadImage("data/arbusto1.png");
   auto1= loadImage("data/obstaculo1.png");
   municion1= loadImage("data/municion.png");
@@ -69,7 +70,7 @@ void setup() {
   textAlign(CENTER);
 
   auto=new Movil();
-  avion = new ArrayList <Aviones>();
+  camion  = new ArrayList <Camiones>();
   obst = new ArrayList <Obstaculos>();
   arbol = new ArrayList <Obstaculos>();
   balaJugador = new ArrayList <Balas>();
@@ -84,20 +85,31 @@ void setup() {
 }
 
 void draw() {
-  kilometraje = (millis() - tComenzarPartida)* 0.0001;
-  tiempo=millis()- tComenzarPartida;
+  kilometraje  = kilometraje + auto.vel.y * 0.00005;
+  tiempo=millis()- tComenzarPartida ;
+  //PUNTAJES
+  if (estadodeljuego == -1) {
+    background(0);
+    fill(255);
+    text("PUNTAJES", width/2, height/10);
 
+    if ( boton(width/10, height/15, width/10, height/20, color(200, 0, 0), "INICIO") && mousePressed ) estadodeljuego = 0;
+  }
   // MENÚ INICIAL
   if (estadodeljuego == 0) {
-    background(20, 100, 120);
+       
+     fill(20, 100, 120,80);
+    rect(width/2, height/2, width, height);
+
     fill(255);
     textSize(80);
     text("Ruta 40", width/2, height/4);
-    fill(0, 100, 0);
-    rect(width/2, height/2, width/4, height/7);
-    textSize(30);
-    fill(0, 200, 0);
-    text("Jugar", width/2, height/2);
+    if ( boton(width/2, height/2, width/5, height/12, color(0, 160, 0), "JUGAR") && mousePressed ) {
+      estadodeljuego = 1;
+      mousePressed = false; // para que no se quite una bala apenas se inicia
+    }
+
+    if ( boton(width/2, height/1.6, width/5, height/12, color(0, 160, 0), "PUNTAJES") && mousePressed ) estadodeljuego = -1;
   }
 
   // JUEGO
@@ -110,14 +122,12 @@ void draw() {
     proceArbol();
     proceSuministros();
     balasProce();
-    auto.mover();
-    auto.mostrar(jugador);
+
     proceHelicoptero();
     proceBotiquin();
     recibirDispDelEnemigo();
     recibirDispDelJugador();
 
-    proceAvion();
     proceAuto();
     colisionarConObst();
     colisionarConArbol();
@@ -125,7 +135,7 @@ void draw() {
     rectMode(CORNER);
     //variable q queremos cambiar, min y max de esa varible y dsp min y max del ancho del rectangulo
     barrasEstado();
-
+    proceCamion();
 
 
 
@@ -135,18 +145,22 @@ void draw() {
 
   // PANTALLA GAME OVER
   if (estadodeljuego == 2) {
-    noLoop();
+    // noLoop();
     rectMode(CENTER);
-    background(50, 0, 0);
-    fill(100, 0, 0);
-    rect(width/2, height/2+height/6, width/3, height/7);
+
+    fill(50, 0, 0, 5);
+    rect(width/2, height/2, width, height);
     textSize(height/10);
-    fill(255);
+    fill(150, 50, 50, 15);
     text("GAME OVER", width/2, height/2);
     textSize(height/20);
-    text("Volver a Jugar", width/2, height- height/3);
-    textSize(height/20);
     text("Tu kilometraje: " + int(kilometraje), width/2, height-height/6);
+    if (boton(width/2, height - height/3, width /3, height/ 6, color(100, 0, 100), "VOLVER A JUGAR") && mousePressed )
+    {
+      mousePressed = false;
+      setup();
+      loop();
+    }
   }
 
 

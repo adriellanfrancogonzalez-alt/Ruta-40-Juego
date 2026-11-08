@@ -31,30 +31,29 @@ void proceCamion() {
   for (Camiones p : camion) {
     p.mostrar();
     p.mover();
-
   }
 
-dispararCamion();
-  if (tiempo - tGuardadoCamion > 1000  && camion.size() == 0) {
-      tGuardadoCamion = tiempo;
-      camion.add(new Camiones( array[9] - array[1]/2 , height - height/15) );
-    }
-   
-   for (int i= camion.size() -1; i >= 0; i--) {//eliminar helicoptero
+  dispararCamion();
+  if (kilometraje - kGuardadoCamion > 1  && camion.size() == 0) {
+    kGuardadoCamion = kilometraje;
+    camion.add(new Camiones( array[9] - array[1]/2, height - height/15) );
+  }
+
+  for (int i= camion.size() -1; i >= 0; i--) {//eliminar helicoptero
     Camiones camionAux = camion.get(i);
     if (camionAux.vida <= 0 ) {
       camion.remove(i);
-      tGuardadoCamion=tiempo;
+      kGuardadoCamion=tiempo;
     }
   }
 }
 
 
-void dispararCamion(){
-     for (Camiones p : camion) {
+void dispararCamion() {
+  for (Camiones p : camion) {
     if (tiempo -p.ultimoDisparo > 1000 && p.pos.y <= height* 2/3) {
       p.ultimoDisparo = tiempo;
-      balaEnemigo.add(new Balas(p.pos.x+random(-40, 40), p.pos.y, auto.pos.x, auto.pos.y, 6) );
+      balaEnemigo.add(new Balas(p.pos.x+random(-40, 40), p.pos.y, auto.pos.x, auto.pos.y, 2) );
     }
   }
 }
@@ -63,7 +62,7 @@ void colisionarConObst() {
     Movil a = auto;
     if ( !estadoInmune() && hayColision( a.pos.x, a.pos.y, a.ancho, a.alto, g.pos.x, g.pos.y, g.ancho*0.75) )
     {
-      a.vida=a.vida-10;
+      a.vida=0;
       a.vel.y=a.vel.y/2;
       auto.ultimaColision=tiempo;
       return;
@@ -90,6 +89,9 @@ void colisionarConArbol() {
 
 
 void proceAuto() {
+  auto.mover();
+  auto.mostrar(jugador);
+
   float aux = auto.maxVel;
   if (auto.vel.y>=auto.maxVel) auto.vel.y=auto.maxVel;// IF PARA NO SUPERAR MAXIMAS VELOCIDADES
 
@@ -99,22 +101,20 @@ void proceAuto() {
       auto.vida = auto.vida - 1;
       tAux= tiempo;
     }
-
-    
   } else auto.maxVel = aux ;
 }
 
 void disparar() {
-  if (estadodeljuego==1 && auto.cantBalas >0 && tiempo - auto.ultimoDisparo > auto.coolDown ) {
-    balaJugador.add(new Balas(auto.pos.x, auto.pos.y, mouseX, mouseY));
+  if (estadodeljuego==1 && auto.cantBalas > 0 && tiempo - auto.ultimoDisparo > auto.coolDown ) {
+    balaJugador.add(new Balas(auto.pos.x, auto.pos.y, mouseX, mouseY, 0 ));
     auto.cantBalas--; // se le resta una bala
     auto.ultimoDisparo= tiempo;
   }
 }
 ////////////////////////////////////////////////////////////////////////////
 void aparecerObst() {
-  if (tiempo- tGuardadoObst >= random(1000, 2000)) {
-    tGuardadoObst=tiempo;
+  if (kilometraje- kGuardadoObst >= random(0.05, 0.15)) {
+    kGuardadoObst= kilometraje;
     //posicion inicial en x
     do {
       arrayPorUsar= int(random(3, 8));
@@ -140,8 +140,8 @@ void eliminarObst() {
 
 
 void aparecerArbol() {
-  if (tiempo- tGuardadoArbol >= random(1000, 5000)) {
-    tGuardadoArbol= tiempo;
+  if (kilometraje - kGuardadoArbol >= random(0.02, 0.05)) {
+    kGuardadoArbol= kilometraje ;
     //posicion inicial en x
 
     //primero saca una prob de 50 50 si(?) es menor que 0.5 saca el primer random, y si no(:) , saca el segundo.d
@@ -164,8 +164,8 @@ void eliminarArbol() {
   }
 }
 void aparecerHeli() {
-  if (tiempo-tGuardadoHeli >= 10000) {//aparecer helicoptero
-    tGuardadoHeli= tiempo;
+  if ( kilometraje -kGuardadoHeli >= 0.5) {//aparecer helicoptero
+    kGuardadoHeli= kilometraje ;
     int direccionHelipX = int(random(2));//ver si va a la derecha o a la izquierda
     if (direccionHelipX == 0) direccionHelipX=-1; // si es cero que vaya a la izquierda
     do {
@@ -196,14 +196,14 @@ void dispararHeli() {
   for (Enemigos p : helicoptero) {
     if (tiempo -p.ultimoDisparo > random(3000, 9000) ) {
       p.ultimoDisparo = tiempo;
-      balaEnemigo.add(new Balas(p.pos.x+random(-40, 40), p.pos.y, auto.pos.x, auto.pos.y, 6) );
+      balaEnemigo.add(new Balas(p.pos.x+random(-40, 40), p.pos.y, auto.pos.x, auto.pos.y, 2) );
     }
   }
 }
 
 void aparecerSumi() {
-  if (tiempo- tGuardadoMuni >= random(10000, 12000)) {   //APARECER
-    tGuardadoMuni=tiempo;
+  if (kilometraje - kGuardadoMuni >= random(0.5, 2)) {   //APARECER
+    kGuardadoMuni = kilometraje;
     do {
       arrayPorUsar= int(random(3, 8));
     } while (ultArrayUsado == arrayPorUsar);
@@ -231,8 +231,8 @@ void eliminarSumi() {
 }
 
 void aparecerBoti() {
-  if (tiempo- tGuardadoBoti >= random(10000, 18000)) {   //APARECER
-    tGuardadoBoti=tiempo;
+  if (kilometraje - kGuardadoBoti >= random(0.5, 3)) {   //APARECER
+    kGuardadoBoti = kilometraje;
     do {
       arrayPorUsar= int(random(3, 8));
     } while (ultArrayUsado == arrayPorUsar);
