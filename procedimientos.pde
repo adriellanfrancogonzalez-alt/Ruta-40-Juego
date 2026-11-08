@@ -1,16 +1,14 @@
 void mousePressed() {
-  if (dist(mouseX, mouseY, width/2, height/2) <= height/4 && estadodeljuego==0) {
-    estadodeljuego = 1;
-    return;
-  }
-  if (dist(mouseX, mouseY, width/2, height/2 + height/6) <=height/3 && estadodeljuego==2) {
-    setup();
-    loop();
-  }
+
+//  if (dist(mouseX, mouseY, width/2, height/2 + height/6) <=height/3 && estadodeljuego==2) {
+//    setup();
+//    loop();
+//  }
 }
 boolean estadoInmune() {
   return auto.ultimaColision != 0  &&
-    tiempo - auto.ultimaColision <= 1000;
+    tiempo - auto.ultimaColision <= 1000 &&
+    auto.vida >=1;
 }
 //el elemento 1 es el auto que es chocado, y el elemento 2 es el circulo que lo choca
 boolean hayColision(float posX1, float posY1, float ancho1, float alto1, float posX2, float posY2, float radio) {
@@ -80,7 +78,7 @@ void todaLaRuta() {
   rectMode(CENTER);
   background(100);
   float anchoPasto=array[1]*3;//pasto de los bordes
-  fill(50, 180, 30);
+  fill(232, 178, 145);
 
   rect(anchoPasto/2, height/2, anchoPasto, height);
 
@@ -192,12 +190,12 @@ void balasProce() {
 void resetearValores() {
   estadodeljuego =0;
   kilometraje=0;
-  tGuardadoCamion=0;
-  tGuardadoHeli=0;
-  tGuardadoObst=0;
-  tGuardadoMuni=0;
-  tGuardadoArbol=0;
-  tGuardadoBoti=0;
+  kGuardadoCamion=0;
+  kGuardadoHeli=0;
+  kGuardadoObst=0;
+  kGuardadoMuni=0;
+  kGuardadoArbol=0;
+  kGuardadoBoti=0;
   ultArrayUsado=0;
   tAux=0;
   tComenzarPartida = millis();
@@ -205,13 +203,46 @@ void resetearValores() {
 }
 
 void barrasEstado() {
-
-  fill(0);
-  rect(array[3], height-height/20, array[6], 15);
-  fill(255, 0, 0);
-  rect(array[3], height-height/20, map(auto.vida, 0, 100, 0, array[6]), 15);
-  fill(0);
-  rect(array[3], height-height/13, array[6], 10);
+  float posX= array[3];
+  float anchoBarras=  array[6];
+  float posYBalas= height-height/13;
+  float posYVida = height-height/20;
+  //barra de balas
+ fill(0);
+for(i=0; i <auto.maxBalas ; i++) line( posX +(anchoBarras / auto.maxBalas) * i ,posYBalas, posX +  (anchoBarras/auto.maxBalas)  * i ,posYBalas + 10);
+  rect(posX, posYBalas , anchoBarras, 10);
   fill(255, 255, 0);
-  rect(array[3], height-height/13, map(auto.cantBalas, 0, auto.maxBalas, 0, array[6]), 10);
+  rect(posX, posYBalas, map(auto.cantBalas, 0, auto.maxBalas, 0, anchoBarras), 10);
+   fill(0);
+for(i=0; i <auto.maxBalas ; i++) line( posX +(anchoBarras / auto.maxBalas) * i ,posYBalas, posX +  (anchoBarras/auto.maxBalas)  * i ,posYBalas + 10);
+ 
+  //barra de vida
+  fill(0);
+  rect( posX, posYVida, anchoBarras, 15);
+  fill(255, 0, 0);
+  rect( posX , posYVida, map(auto.vida, 0, 100, 0, anchoBarras), 15);
+ 
+}
+
+boolean boton(float posX, float posY,float ancho,float alto,color colores, String texto){
+float tamañoTexto = ancho/10;
+float mult = 1.2; // multiplicador para agrandar
+  rectMode(CENTER);
+  if (hayColision(posX, posY, ancho, alto , mouseX, mouseY,1) ) {
+     fill(lerpColor(colores, #FFFFFF, 0.4));
+    rect(posX , posY, ancho * mult, alto * mult);
+    textSize(tamañoTexto * mult);
+    fill(lerpColor(colores, #FFFFFF, 0.1));
+    text(texto, posX, posY);
+    return true;
+  }
+  else{
+      fill(colores );
+    rect(posX, posY, ancho, alto);
+    textSize(tamañoTexto);
+    fill(0);
+    text(texto, posX, posY);
+    return false;
+    
+  }
 }
